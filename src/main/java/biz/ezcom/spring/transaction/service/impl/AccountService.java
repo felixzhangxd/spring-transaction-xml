@@ -26,7 +26,7 @@ public class AccountService implements IAccountService {
     @Override
     public void doTransfer(Account fromAccount, Account toAccount, Double money) throws Throwable {
         Double fromBalance = fromAccount.getBalance() - money;
-        if(fromBalance < 0) {
+        if (fromBalance < 0) {
             throw new OverdrawException("交易金额透支异常");
         }
         fromAccount.setBalance(fromBalance);
@@ -34,7 +34,6 @@ public class AccountService implements IAccountService {
         toAccount.setBalance(toBalance);
         accountDao.modify(fromAccount);
         accountDao.modify(toAccount);
-        
         accountService.payServiceFee(toAccount, money);
         accountService.payServiceFee(fromAccount, money);
     }
@@ -42,7 +41,7 @@ public class AccountService implements IAccountService {
     @Override
     public void payServiceFee(Account account, Double money) throws Throwable {
         Double balance = account.getBalance() - money / 100;
-        if(balance < 0) {
+        if (balance < 0) {
             throw new OverdrawException("支付银行手续费透支异常");
         }
         account.setBalance(balance);
